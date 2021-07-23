@@ -18,9 +18,14 @@ const hitSound = new Audio('swish.m4a');
 const winSound = new Audio('cash.mp3');
 const lossSound = new Audio('aww.mp3');
 
+let pauseBoolean;
+pauseBoolean = false;
+
 document.querySelector('#blackjack-hit-button').addEventListener('click', blackjackHit);
 document.querySelector('#blackjack-deal-button').addEventListener('click', blackjackDeal);
 document.querySelector('#blackjack-stand-button').addEventListener('click', dealerLogic);
+document.querySelector('#blackjack-reset-button').addEventListener('click', reloadGame);
+document.querySelector('#blackjack-pause-button').addEventListener('click', pauseFunc);
 
 function blackjackHit() {
     if (blackjackGame['isStand'] === false) {
@@ -43,6 +48,10 @@ function showCard(card, activePlayer) {
         document.querySelector(activePlayer['div']).appendChild(cardImage);
         hitSound.play();
     }
+}
+
+function pauseFunc(){
+    pauseBoolean = true;
 }
 
 function blackjackDeal() {
@@ -102,18 +111,32 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+async function resumeGame() {
+    $('#pause-modal').modal('hide');
+}
+
+async function pauseGame() {
+    $('#pause-modal').modal('show');
+}
+
+function reloadGame() {
+    location.reload();
+}
+
 async function dealerLogic() {
-    blackjackGame['isStand'] = true;
-    while (DEALER['score'] < 16 && blackjackGame['isStand'] === true) {
-        let card = randomCard();
-        showCard(card, DEALER);
-        upadteScore(card, DEALER);
-        showScore(DEALER);
-        await sleep(1000);
+    while (pauseBoolean === false) {
+        blackjackGame['isStand'] = true;
+        while (DEALER['score'] < 16 && blackjackGame['isStand'] === true) {
+            let card = randomCard();
+            showCard(card, DEALER);
+            upadteScore(card, DEALER);
+            showScore(DEALER);
+            await sleep(1000);
+        }
+        blackjackGame['turnsOver'] = true;
+        let winner = computeWinner();
+        showResult(winner);
     }
-    blackjackGame['turnsOver'] = true;
-    let winner = computeWinner();
-    showResult(winner);
 }
 
 function computeWinner() {
@@ -121,19 +144,26 @@ function computeWinner() {
     if (DEALER['score'] > 21 && YOU['score'] <= 21) {
         blackjackGame['wins'] += 1;
         winner = YOU;
+        alanBtnInstance.playText("Congratulations! You won the game!");
     } else if (YOU['score'] > 21 && DEALER['score'] <= 21) {
         blackjackGame['losses'] += 1;
         winner = DEALER;
+        dealerScoreText = DEALER['score'].toString();
+        alanBtnInstance.playText("Better luck next time!");
     } else if (YOU['score'] === DEALER['score']) {
         blackjackGame['draws'] += 1;
+        alanBtnInstance.playText("Good game! We tied.");
     } else if (YOU['score'] > 21 && DEALER['score'] > 21) {
         blackjackGame['draws'] += 1;
+        alanBtnInstance.playText("Good game! We tied.");
     } else if (YOU['score'] < DEALER['score'] && DEALER['score'] <= 21) {
         blackjackGame['losses'] += 1;
         winner = DEALER;
+        alanBtnInstance.playText("Better luck next time!");
     } else if (YOU['score'] > DEALER['score'] && YOU['score'] <= 21) {
         blackjackGame['wins'] += 1;
         winner = YOU;
+        alanBtnInstance.playText("Congratulations! You won the game!");
     }
     console.log(blackjackGame);
     return winner;
