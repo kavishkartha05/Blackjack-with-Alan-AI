@@ -36,3 +36,20 @@ intent('(I want to deal.|New game.) (Deal.|)', p => {
     p.play({command: 'userDeal', item: p.COMMAND});
 })
 
+intent('(I want to pause.|) (Pause.|)', p => {
+    p.play('No problem!', "Sure!", 'Alright');
+    let yourCommand = p.COMMAND;
+    p.play({command: 'userPause', item: p.COMMAND});
+});
+
+intent('(I want to resume.|) (Resume.|)', p => {
+    p.play('No problem!', "Sure!", 'Alright');
+    let yourCommand = p.COMMAND;
+    p.play({command: 'userResume', item: p.COMMAND});
+});
+
+intent('(I want to reset.|) (Reset.|)', p => {
+    p.play('No problem!', "Sure!", 'Alright');
+    let yourCommand = p.COMMAND;
+    p.play({command: 'userReload', item: p.COMMAND});
+});
