@@ -1,6 +1,6 @@
 intent("(Let's|I want to) play!", p => {
     p.play('Sure!', 'Alright!', 'Here we go!');
-    p.play('You can choose to hit by saying hit, or to stand by saying stand. To reset the game say deal.');
+    p.play('You can choose to hit by saying hit, or to stand by saying stand. To reset the game say deal, and say pause if you would like to pause the game. You can also click the buttons if you would like.');
     
 });
 
