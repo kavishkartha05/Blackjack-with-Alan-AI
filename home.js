@@ -1,6 +1,6 @@
 // Blackjack with Alan AI:
 let blackjackGame = {
-    'you': {'scoreSpan': '#your-blackjack-result', 'div': '#your-box', 'score': 0},
+    'you': {'scoreSpan': '#your-blackjack-result', 'div': '#your-box', 'score': 0, 'money': 0},
     'dealer': {'scoreSpan': '#dealer-blackjack-result', 'div': '#dealer-box', 'score': 0},
     'cards': ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'K', 'J', 'Q', 'A'],
     'cardsMap': {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'K': 10, 'J': 10, 'Q': 10, 'A': [1, 11]},
@@ -17,9 +17,6 @@ const DEALER = blackjackGame['dealer']
 const hitSound = new Audio('swish.m4a');
 const winSound = new Audio('cash.mp3');
 const lossSound = new Audio('aww.mp3');
-
-let pauseBoolean;
-pauseBoolean = false;
 
 document.querySelector('#blackjack-hit-button').addEventListener('click', blackjackHit);
 document.querySelector('#blackjack-deal-button').addEventListener('click', blackjackDeal);
@@ -48,10 +45,6 @@ function showCard(card, activePlayer) {
         document.querySelector(activePlayer['div']).appendChild(cardImage);
         hitSound.play();
     }
-}
-
-function pauseFunc(){
-    pauseBoolean = true;
 }
 
 function blackjackDeal() {
@@ -94,7 +87,6 @@ function upadteScore(card, activePlayer) {
     }
 }
 
-
 function showScore(activePlayer) {
     if (activePlayer['score'] > 21) {
         document.querySelector(activePlayer['scoreSpan']).textContent = 'BUST!';
@@ -124,19 +116,17 @@ function reloadGame() {
 }
 
 async function dealerLogic() {
-    while (pauseBoolean === false) {
-        blackjackGame['isStand'] = true;
-        while (DEALER['score'] < 16 && blackjackGame['isStand'] === true) {
-            let card = randomCard();
-            showCard(card, DEALER);
-            upadteScore(card, DEALER);
-            showScore(DEALER);
-            await sleep(1000);
-        }
-        blackjackGame['turnsOver'] = true;
-        let winner = computeWinner();
-        showResult(winner);
+    blackjackGame['isStand'] = true;
+    while (DEALER['score'] < 16 && blackjackGame['isStand'] === true) {
+        let card = randomCard();
+        showCard(card, DEALER);
+        upadteScore(card, DEALER);
+        showScore(DEALER);
+        await sleep(1000);
     }
+    blackjackGame['turnsOver'] = true;
+    let winner = computeWinner();
+    showResult(winner);
 }
 
 function computeWinner() {
@@ -145,11 +135,13 @@ function computeWinner() {
         blackjackGame['wins'] += 1;
         winner = YOU;
         alanBtnInstance.playText("Congratulations! You won the game!");
+        YOU['money'] = YOU['money'] + 100;
     } else if (YOU['score'] > 21 && DEALER['score'] <= 21) {
         blackjackGame['losses'] += 1;
         winner = DEALER;
         dealerScoreText = DEALER['score'].toString();
         alanBtnInstance.playText("Better luck next time!");
+        YOU['money'] = YOU['money'] - 100;
     } else if (YOU['score'] === DEALER['score']) {
         blackjackGame['draws'] += 1;
         alanBtnInstance.playText("Good game! We tied.");
@@ -160,10 +152,12 @@ function computeWinner() {
         blackjackGame['losses'] += 1;
         winner = DEALER;
         alanBtnInstance.playText("Better luck next time!");
+        YOU['money'] = YOU['money'] - 100;
     } else if (YOU['score'] > DEALER['score'] && YOU['score'] <= 21) {
         blackjackGame['wins'] += 1;
         winner = YOU;
         alanBtnInstance.playText("Congratulations! You won the game!");
+        YOU['money'] = YOU['money'] + 100;
     }
     console.log(blackjackGame);
     return winner;
@@ -173,11 +167,13 @@ function showResult(winner) {
     let message, messageColor;
     if (winner === YOU) {
         document.querySelector('#wins').textContent = blackjackGame['wins'];
+        document.querySelector('#blackjack-money').textContent = YOU['money'];
         message = 'You Won!';
         messageColor = 'green';
         winSound.play();
     } else if (winner === DEALER) {
         document.querySelector('#losses').textContent = blackjackGame['losses'];
+        document.querySelector('#blackjack-money').textContent = YOU['money'];
         message = 'You Lost!';
         messageColor = 'red';
         lossSound.play();
@@ -189,4 +185,14 @@ function showResult(winner) {
     
     document.querySelector('#blackjack-result').textContent = message;
     document.querySelector('#blackjack-result').style.color = messageColor;
+    if (YOU['money'] < 0) {
+        document.querySelector('#blackjack-money').textContent = '-$' + Math.abs(YOU['money']);
+        document.querySelector('#blackjack-money').style.color = 'red';
+    } else if (YOU['money'] === 0) {
+        document.querySelector('#blackjack-money').textContent = '$' + YOU['money'];
+        document.querySelector('#blackjack-money').style.color = 'black';
+    } else {
+        document.querySelector('#blackjack-money').textContent = '$' + YOU['money'];
+        document.querySelector('#blackjack-money').style.color = 'green';
+    }
 }
