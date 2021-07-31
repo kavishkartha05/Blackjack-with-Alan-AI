@@ -15,6 +15,7 @@
         <h2>Blackjack with Alan AI</h2>
         <h3>By: Kavish Kartha</h3>
         <h2><span id="blackjack-result">Let's Play!</span></h2>
+        <h2><span id="blackjack-money">$0</span></h2>
 
         <div class="flex-blackjack-row-1">
             <div id="your-box">
@@ -73,28 +74,28 @@
     </div>
     <script src='home.js'></script>
     <div class="alan-btn"></div>
-    <script type="text/javascript" src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
+    <script type="text/javascript"
+    src="https://studio.alan.app/web/lib/alan_lib.min.js"></script>
     <script>
-        var alanBtnInstance = alanBtn({
-            key: "315958344093d3ef071e9814d6373b282e956eca572e1d8b807a3e2338fdd0dc/stage",
-            onCommand: function (commandData) {
-                if (commandData.command === "userHit") {
-                    blackjackHit();
-                } else if (commandData.command === "userStand"){
-                    dealerLogic();
-                } else if (commandData.command === "userDeal"){
-                    blackjackDeal();
-                } else if (commandData.command === "userPause"){
-                    pauseGame();
-
-                } else if (commandData.command === "userResume") {
-                    resumeGame();
-                } else if (commandData.command === "userReload") {
-                    reloadGame();
-                }
-            },
-            rootEl: document.getElementById("alan-btn"),
-        });
+    var alanBtnInstance = alanBtn({
+        key: "a5b37be63c433708071e9814d6373b282e956eca572e1d8b807a3e2338fdd0dc/stage",
+        onCommand: function (commandData) {
+            if (commandData.command === "userHit") {
+                blackjackHit();
+            } else if (commandData.command === "userStand"){
+                dealerLogic();
+            } else if (commandData.command === "userDeal"){
+                blackjackDeal();
+            } else if (commandData.command === "userPause"){
+                pauseGame();
+            } else if (commandData.command === "userResume") {
+                resumeGame();
+            } else if (commandData.command === "userReload") {
+                reloadGame();
+            }
+        },
+        rootEl: document.getElementById("alan-btn"),
+    });
     </script>
 </body>
 </html>
