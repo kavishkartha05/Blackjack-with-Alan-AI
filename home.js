@@ -1,3 +1,4 @@
+  
 // Blackjack with Alan AI:
 let blackjackGame = {
     'you': {'scoreSpan': '#your-blackjack-result', 'div': '#your-box', 'score': 0, 'money': 0},
@@ -185,14 +186,16 @@ function showResult(winner) {
     
     document.querySelector('#blackjack-result').textContent = message;
     document.querySelector('#blackjack-result').style.color = messageColor;
+    let negativeMoney;
     if (YOU['money'] < 0) {
-        document.querySelector('#blackjack-money').textContent = '-$' + Math.abs(YOU['money']);
+        document.querySelector('#blackjack-money').textContent = 'You: -$' + Math.abs(YOU['money']);
         document.querySelector('#blackjack-money').style.color = 'red';
+        negativeMoney = True;
     } else if (YOU['money'] === 0) {
-        document.querySelector('#blackjack-money').textContent = '$' + YOU['money'];
+        document.querySelector('#blackjack-money').textContent = 'You: $' + YOU['money'];
         document.querySelector('#blackjack-money').style.color = 'black';
     } else {
-        document.querySelector('#blackjack-money').textContent = '$' + YOU['money'];
+        document.querySelector('#blackjack-money').textContent = 'You: $' + YOU['money'];
         document.querySelector('#blackjack-money').style.color = 'green';
     }
 }
