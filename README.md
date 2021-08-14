@@ -1,4 +1,4 @@
-# Blackjack-with-Alan-AI
+# Blackjack with Alan-AI
 
 Around April of 2020, I decided to learn JavaScript. I worked my way through Rafeh Qazi's JavaScript tutorial on YouTube, and followed along while he created multiple projects. These projects included Rock Paper Scissors, a Cat Generator, and my personal favorite, Blackjack. 
 
