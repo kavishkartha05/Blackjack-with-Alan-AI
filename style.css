@@ -5,6 +5,13 @@
     text-align: center;
 }
 
+.flex-blackjack-player-money, .flex-blackjack-dealer-money {
+    border: 1px solid black;
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+}
+
 .flex-blackjack-row-1, .flex-blackjack-row-2, .flex-blackjack-row-3 {
     display: flex;
     border: 1px solid black;
@@ -14,7 +21,7 @@
 }
 
 .flex-blackjack-row-1, .flex-blackjack-row-2 {
-    background: url('https://image.freepik.com/free-vector/poker-table-background-green-color_47243-1068.jpg');
+    background: url('images/felt.jpg');
     background-size: 900px 500px;
     color: white;
 }
